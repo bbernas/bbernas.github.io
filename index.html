@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Braden Bernas</title>
+  <link rel="icon" href="b.png">
+  <style>
+    /* Centering the page content */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden; /* to hide overflowing shapes */
+      position: relative;
+    }
+
+    /* Style for the toolbar */
+    .toolbar {
+      font-family: Arial, sans-serif;
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2; /* Ensure toolbar is on top */
+    }
+
+    /* Style for the links in the toolbar */
+    .toolbar a {
+      color: #fff;
+      text-decoration: none;
+      margin-right: 20px;
+      transition: color 0.3s ease;
+    }
+
+    /* Hover effect for toolbar links */
+    .toolbar a:hover {
+      color: #999; /* Darken the color on hover */
+    }
+
+    /* Style for the main content */
+    .content {
+      padding: 20px;
+      text-align: center;
+      margin-top: 60px; /* Adjust as needed to avoid content overlapping with the toolbar */
+      position: relative; /* Ensure z-index works */
+      z-index: 1; /* Ensure content stays on top of the shapes */
+    }
+
+    /* Animation for moving circles */
+    .background-circles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0; /* Ensure circles are behind the toolbar */
+    }
+
+    .background-circle {
+      position: absolute;
+      border-radius: 50%;
+      background-color: rgba(173, 216, 230, 0.7); /* Baby blue spectrum */
+      animation: move-circle linear infinite;
+    }
+
+    @keyframes move-circle {
+      from {
+        transform: translate(0, 0);
+      }
+      to {
+        transform: translate(var(--tx), var(--ty)); /* Use CSS variables for translation */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="resume.html">Resume/CV</a>
+    <a href="contact.html">Contact Me</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <h1>Welcome to My Website</h1>
+    <p>Hi! I'm Braden, Welcome to my Website, feel free to navigate and explore.</p>
+  </div>
+
+  <!-- Background Circles -->
+  <div class="background-circles" id="background-circles"></div>
+
+  <script>
+    // Dynamically create circles and add them to the background
+    const backgroundCircles = document.getElementById('background-circles');
+    const numCircles = 50;
+
+    // Function to calculate random movement values within the window dimensions
+    function getRandomMovement() {
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const tx = Math.random() * windowWidth - windowWidth / 2; // Random horizontal translation value within window width
+      const ty = Math.random() * windowHeight - windowHeight / 2; // Random vertical translation value within window height
+      return { tx, ty };
+    }
+
+    for (let i = 0; i < numCircles; i++) {
+      const circle = document.createElement('div');
+      circle.classList.add('background-circle');
+      circle.style.width = `${Math.random() * 50 + 20}px`; // Random size between 20px and 70px
+      circle.style.height = circle.style.width;
+      circle.style.backgroundColor = `rgba(173, 216, 230, ${Math.random() * 0.5 + 0.3})`; // Random opacity within range
+      circle.style.top = `${Math.random() * window.innerHeight}px`; // Random vertical position
+      circle.style.left = `${Math.random() * window.innerWidth}px`; // Random horizontal position
+      circle.style.animationDuration = `${Math.random() * 5 + 5}s`; // Random animation duration between 5s and 10s
+
+      // Randomize initial direction of movement
+      const { tx, ty } = getRandomMovement();
+      circle.style.setProperty('--tx', `${tx}px`); // Set CSS variable for horizontal translation
+      circle.style.setProperty('--ty', `${ty}px`); // Set CSS variable for vertical translation
+
+      backgroundCircles.appendChild(circle);
+
+      // Update animation when circle reaches the border
+      circle.addEventListener('animationiteration', () => {
+        const { tx, ty } = getRandomMovement();
+        circle.style.setProperty('--tx', `${tx}px`); // Set CSS variable for horizontal translation
+        circle.style.setProperty('--ty', `${ty}px`); // Set CSS variable for vertical translation
+      });
+    }
+  </script>
+</body>
+</html>
